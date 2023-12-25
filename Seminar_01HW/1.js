@@ -44,6 +44,7 @@ for (const album of albums) {
 }
 console.log('\n');
 
+console.log('Using collection');
 const musCollection = {
 	collectionName: 'Favorite',
 	albums,
@@ -60,7 +61,6 @@ const musCollection = {
 	},
 };
 
-console.log('Using collection');
 for (const album of musCollection) {
 	console.log(`"${album.title}" - ${album.artist} (${album.year})`);
 }

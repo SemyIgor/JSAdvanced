@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /*
 ###Задание 2
@@ -25,63 +25,132 @@
 Десерт Чизкейк
 */
 
+const cooks = new Map();
+cooks.set('Пицца', 'Олег').set('Суши', 'Андрей').set('Десерт', 'Анна');
+
+const recipes = new Map();
+recipes
+	.set('Маргарита', 'Пицца')
+	.set('Пепперони', 'Пицца')
+	.set('Три сыра', 'Пицца')
+	.set('Филадельфия', 'Суши')
+	.set('Калифорния', 'Суши')
+	.set('Чизмаки', 'Суши')
+	.set('Сеякемаки', 'Суши')
+	.set('Тирамису', 'Десерт')
+	.set('Чизкейк', 'Десерт');
+
 // Посетитель ресторана.
 class Client {
-  constructor(firstname, lastname) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-  }
+	constructor(firstname, lastname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
 }
 
 // Вам необходимо реализовать класс, который управляет заказами и поварами.
 class Manager {
+	// Здесь будут храниться все клиенты данного менеджера с их последними заказами
+	static MANAGER_CLIENTS = new Map();
 
+	newOrder(client, ...dishes) {
+		// Проверим, есть ли заказываемые блюда в меню
+		const recipesKeys = new Set(recipes.keys());
+		for (const dish of dishes) {
+			if (!recipesKeys.has(dish.name)) {
+				throw `${dish.type} "${dish.name}" - такого блюда не существует.`;
+			}
+		}
+
+		// Если этот клиент уже имеет заказ, то формируем сводный заказ:
+		if (Manager.MANAGER_CLIENTS.has(client)) {
+			console.log(
+				`Клиент ${client.firstname} ${client.lastname} уже имеет заказ, формируем сводный`
+			);
+
+			// Находим в новом заказе уже заказанные блюда и добавляем количество таких же блюд из старого заказа
+			let dishRepeatedNames = new Set();
+			// Перебор блюд в старом заказе
+			for (const dishOrdered of Manager.MANAGER_CLIENTS.get(client)) {
+				// Перебор блюд в новом заказе и сравнение их со старым заказом
+				for (let index = 0; index < dishes.length; index++) {
+					// Если повтор, то суммируем количество:
+					if (dishes[index].name === dishOrdered.name) {
+						dishes[index].quantity += dishOrdered.quantity;
+						dishRepeatedNames.add(dishOrdered.name); // Формируем список названий повторяющихся в заказе блюд
+					}
+				}
+			}
+
+			// Заносим в новый список неповторяющиеся блюда из старого заказа
+			for (const dishOrdered of Manager.MANAGER_CLIENTS.get(client)) {
+				if (!dishRepeatedNames.has(dishOrdered.name)) {
+					dishes.push(dishOrdered);
+				}
+			}
+			Manager.MANAGER_CLIENTS.delete(client);
+		}
+
+		console.log(`Клиент ${client.firstname} заказал:`);
+		for (const dish of dishes) {
+			console.log(
+				`${dish.type} "${dish.name}" - ${
+					dish.quantity
+				}; готовит повар ${cooks.get(dish.type)}`
+			);
+		}
+		Manager.MANAGER_CLIENTS.set(client, dishes);
+	}
 }
 
 // Можно передать внутрь конструктора что-либо, если необходимо.
 const manager = new Manager();
 
 // Вызовы ниже должны работать верно, менять их нельзя, удалять тоже.
+
 manager.newOrder(
-  new Client("Иван", "Иванов"), 
-  { name: "Маргарита", quantity: 1, type: "Пицца" },
-  { name: "Пепперони", quantity: 2, type: "Пицца" },
-  { name: "Чизкейк", quantity: 1, type: "Десерт" },
+	new Client('Иван', 'Иванов'),
+	{ name: 'Маргарита', quantity: 1, type: 'Пицца' },
+	{ name: 'Пепперони', quantity: 2, type: 'Пицца' },
+	{ name: 'Чизкейк', quantity: 1, type: 'Десерт' }
 );
+
 // Вывод:
-// Клиент Иван заказал: 
+// Клиент Иван заказал:
 // Пицца "Маргарита" - 1; готовит повар Олег
 // Пицца "Пепперони" - 2; готовит повар Олег
 // Десерт "Чизкейк" - 1; готовит повар Анна
 
-// ---
+const clientPavel = new Client('Павел', 'Павлов');
 
-const clientPavel = new Client("Павел", "Павлов");
 manager.newOrder(
-  clientPavel, 
-  { name: "Филадельфия", quantity: 5, type: "Суши" },
-  { name: "Калифорния", quantity: 3, type: "Суши" },
+	clientPavel,
+	{ name: 'Филадельфия', quantity: 5, type: 'Суши' },
+	{ name: 'Калифорния', quantity: 3, type: 'Суши' }
 );
+
 // Вывод:
-// Клиент Павел заказал: 
+// Клиент Павел заказал:
 // Суши "Филадельфия" - 5; готовит повар Андрей
 // Суши "Калифорния" - 3; готовит повар Андрей
 
 manager.newOrder(
-  clientPavel, 
-  { name: "Калифорния", quantity: 1, type: "Суши" },
-  { name: "Тирамису", quantity: 2, type: "Десерт" },
+	clientPavel,
+	{ name: 'Калифорния', quantity: 1, type: 'Суши' },
+	{ name: 'Тирамису', quantity: 2, type: 'Десерт' }
 );
+
 // Вывод:
-// Клиент Павел заказал: 
+// Клиент Павел заказал:
 // Суши "Филадельфия" - 5; готовит повар Андрей
 // Суши "Калифорния" - 4; готовит повар Андрей
 // Десерт "Тирамису" - 2; готовит повар Анна
 
 manager.newOrder(
-  clientPavel, 
-  { name: "Филадельфия", quantity: 1, type: "Суши" },
-  { name: "Трубочка с вареной сгущенкой", quantity: 1, type: "Десерт" },
+	clientPavel,
+	{ name: 'Филадельфия', quantity: 1, type: 'Суши' },
+	{ name: 'Трубочка с вареной сгущенкой', quantity: 1, type: 'Десерт' }
 );
+
 // Ничего не должно быть добавлено, должна быть выброшена ошибка:
 // Десерт "Трубочка с вареной сгущенкой" - такого блюда не существует.
