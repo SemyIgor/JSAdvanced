@@ -23,7 +23,7 @@ const library = {
 	// 			if (index < this.books.length) {
 	// 				return { done: false, value: this.books[index++] };
 	// 			}
-	// 			return { done: true };
+	// 			return { done: true }; // Список закончился, где done - параметр next
 	// 		},
 	// 	};
 	// },

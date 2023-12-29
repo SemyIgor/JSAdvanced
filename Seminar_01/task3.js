@@ -18,7 +18,7 @@
 <div data-active="false">Element 5</div>
 */
 
-const divList = document.querySelectorAll('div');
+const divList = document.querySelectorAll('div'); // не совсем массив
 
 // const divArray = Array.from(divList);
 // Или, можно использовать другой вариант:
