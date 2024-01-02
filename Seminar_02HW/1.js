@@ -89,10 +89,6 @@ class Library {
 			}
 		}
 	}
-
-	// hasBook(book){
-	//    return
-	// }
 }
 
 const booksList = [

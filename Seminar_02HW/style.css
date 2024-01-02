@@ -1,0 +1,23 @@
+.product {
+   max-width: 45vw;
+   background-color: cadetblue;
+   padding: 10px;
+   margin-bottom: 10px;
+}
+
+.review-input {
+   width: 60%;
+}
+
+.reviews-list {
+   width: 100%;
+}
+
+.review {
+   width: 90%;
+}
+
+.error-message-place {
+   width: 35%;
+   color: red;
+}
