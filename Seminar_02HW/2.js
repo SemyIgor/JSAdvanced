@@ -62,6 +62,19 @@ const initialData = [
 	},
 ];
 
+// ==== Lines to copy-paste for testing ======================================================
+const less50 = 'alias exercitationem a accusantium';
+console.log('less50: ', less50.length);
+
+const from50To500 =
+	'alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non';
+console.log('from50To500: ', from50To500.length);
+
+const more500 =
+	'alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non alias exercitationem a accusantium, eligendi quae hic repudiandae, perferendis vel, nihil labore autem. Mollitia non';
+console.log('more500: ', more500.length);
+// --------------------------------------------------------------------------------------------
+
 const mainPage = document.querySelector('.main-page');
 
 productsOutput();
