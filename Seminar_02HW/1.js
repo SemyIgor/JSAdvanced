@@ -21,26 +21,22 @@
 
 // Не смог преодалеть желание не отрывать автора от его книги.
 
+function bookIsDouble(book, array) {
+	const repeatitions = array.filter(
+		(item) => item.title === book.title && item.author === book.author
+	).length;
+	if (repeatitions > 1) return true;
+}
+
 class Library {
 	#books;
 	constructor(booksList) {
-		try {
-			booksList.forEach((element) => {
-				if (bookIsDouble(element, booksList)) {
-					throw new Error('Обнаружен повтор !');
-				}
-			});
-			this.#books = booksList.slice(0);
-		} catch (err) {
-			return err;
-		}
-
-		function bookIsDouble(book, array) {
-			const repeatitions = array.filter(
-				(item) => item.title === book.title && item.author === book.author
-			).length;
-			if (repeatitions > 1) return true;
-		}
+		booksList.forEach((element) => {
+			if (bookIsDouble(element, booksList)) {
+				throw new Error('Обнаружен повтор !');
+			}
+		});
+		this.#books = booksList.slice(0);
 	}
 
 	get allBooks() {
@@ -52,37 +48,27 @@ class Library {
 			(item) => item.title === book.title && item.author === book.author
 		).length;
 		if (repeatitions !== 0) return true;
+		return false;
 	}
 
 	addBook(book) {
-		try {
-			if (this.hasBook(book)) {
-				throw new Error('Такая книга уже есть в библиотеке');
-			}
-		} catch (err) {
-			console.log('err: ', err.message);
-			return err;
+		if (this.hasBook(book)) {
+			throw new Error('Такая книга уже есть в библиотеке');
 		}
 		this.#books.push(book);
 	}
 
 	removeBook(book) {
-		try {
-			if (!this.hasBook(book)) {
-				throw new Error('Такой книги нет в библиотеке');
-			}
-		} catch (err) {
-			console.log('err: ', err.message);
-			return err;
-		}
 		for (let index = 0; index < this.#books.length; index++) {
 			if (
 				this.#books[index].title === book.title &&
 				this.#books[index].author === book.author
 			) {
 				this.#books.splice(index, 1);
+				return;
 			}
 		}
+		throw new Error('Такой книги нет в библиотеке');
 	}
 }
 
@@ -96,20 +82,19 @@ const booksList = [
 ];
 
 const library = new Library(booksList);
-// console.log('library: ', library);
 
 console.log('Распечатали список книг');
 console.log('library.allBooks: ', library.allBooks);
 
 console.log('Добавляем книгу');
-library.addBook({ title: 'Метро 2035', author: 'Дмитрий Глуховский' }); // Is in the list
-// library.addBook({
-// 	title: 'Собор Парижской Богоматери',
-// 	author: 'Виктор Гюго',
-// }); // Not in the list
+// library.addBook({ title: 'Метро 2035', author: 'Дмитрий Глуховский' }); // Is on the list
+library.addBook({
+	title: 'Собор Парижской Богоматери',
+	author: 'Виктор Гюго',
+}); // Not in the list
 console.log('library.allBooks: ', library.allBooks);
 
 console.log('Удаляем книгу');
-library.removeBook({ title: 'Метро 2035', author: 'Дмитрий Глуховский' }); // Is in the list
-// library.removeBook({ title: 'Война и мир', author: 'Лев Толстой' }); // Not in the list
+library.removeBook({ title: 'Метро 2035', author: 'Дмитрий Глуховский' }); // Is on the list
+// library.removeBook({ title: 'Война и мир', author: 'Лев Толстой' }); // Not on the list
 console.log('library.allBooks: ', library.allBooks);
