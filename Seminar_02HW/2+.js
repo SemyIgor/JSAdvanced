@@ -81,26 +81,48 @@ const more500 =
 console.log('more500: ', more500.length);
 // --------------------------------------------------------------------------------------------
 
+// Получаем элемент, в котором планируем разместить наши товары с отзывами
 const mainPage = document.querySelector('.main-page');
 
 productsOutput();
 
-function addReview(numb) {
-	// Сохраняем в переменную адрес полей ввода отзыва
-	const inputField = document.querySelectorAll('.review-input');
-	// Очищаем поля вывода сообщения об ошибке ввода
+function addReview(getId) {
+	// Сохраняем в переменную псевдо-массив элементов полей ввода
+	const inputFields = document.querySelectorAll('.review-input');
+
+	// Очищаем поля вывода сообщения об ошибке
 	const errorMessagePlace = document.querySelectorAll('.error-message-place');
 	errorMessagePlace.forEach((elem) => {
 		elem.textContent = '';
 	});
+	// Преобразуем псевдо-массив в массив
+	const inputFieldsArray = [...inputFields];
 
-	const inputString = inputField[numb].value;
-	if (inputString.length < 50 || inputString.length > 500) {
-		throw new Error('Ошибка ввода');
+	// Фильтруем его по дата-атрибуту, соответствующему нажатой кнопке и получаем строку отзыва
+	const inputString = inputFieldsArray.filter(
+		(elem) => elem.getAttribute('data-id') === getId
+	)[0].value;
+
+	// "Отсекаем" сообщения менее 50 и более 500 символов, если 0, то очищаются поля сообщения об ошибке
+	if (inputString.length === 0) {
+		return;
+	} else if (inputString.length < 50 || inputString.length > 500) {
+		Array.from(errorMessagePlace).filter(
+			(elem) => elem.getAttribute('data-id') === getId
+		)[0].textContent = 'Ошибка ввода';
+	} else {
+		// Формируем и заносим в массив данных новый отзыв
+		const reviewToAdd = { id: idGenerator(), text: inputString };
+
+		initialData
+			.filter((elem) => elem.id.toString() === getId)[0]
+			.reviews.push(reviewToAdd);
+		// Перезаписываем на странице список товаров с отзывами
+		productsOutput();
 	}
-	const reviewToAdd = { id: idGenerator(), text: inputString };
-	initialData[numb].reviews.push(reviewToAdd);
-	productsOutput();
+	// Очистим поля ввода отзывов
+	inputFields.forEach((elem) => (elem.value = ''));
+	console.log('inputFields: ', inputFields);
 }
 
 function productsOutput() {
@@ -117,17 +139,18 @@ function productsOutput() {
 			`<div class="product">
 		   <h2 class="product-name">${item.product}</h2>
 		   <ul class="reviews-list">${reviewsList}</ul>
-		   <input type="text" class="review-input" placeholder="Введите отзыв">
-			<span class="error-message-place"></span><br>
-		   <button class="check-button" attr="${item.id}">Опубликовать</button>
+		   <input type="text" class="review-input" data-id="${item.id}" placeholder="Введите отзыв">
+			<span class="error-message-place" data-id="${item.id}"></span><br>
+		   <button class="check-button" data-id="${item.id}">Опубликовать</button>
 		 </div>`
 		);
 	});
 
 	const buttonCheck = document.querySelectorAll('.check-button');
-	buttonCheck.forEach((button, numb) => {
+	buttonCheck.forEach((button) => {
 		button.addEventListener('click', () => {
-			addReview(numb);
+			const getId = button.getAttribute('data-id');
+			addReview(getId);
 		});
 	});
 }
