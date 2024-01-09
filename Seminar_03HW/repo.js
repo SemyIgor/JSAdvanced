@@ -27,7 +27,7 @@ function addReview(name, text) {
 
 function getShopBase() {
 	const shopTest = JSON.parse(localStorage.getItem(shop));
-	console.log('shopTest: ', shopTest);
+	// console.log('shopTest: ', shopTest);
 	// return localStorage.getItem(shop);
 	return shopTest;
 }
