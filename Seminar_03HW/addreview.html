@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Добавить отзыв</title>
+   <style>
+      .product,
+      .review {
+         display: flex;
+         margin-bottom: 20px;
+         justify-content: space-between;
+         max-width: 400px;
+      }
+
+      span {
+         color: red;
+         margin-left: 20px;
+      }
+
+      #to-reviews_btn {
+         display: block;
+         width: 400px;
+         margin-top: 20px;
+      }
+
+      button {
+         cursor: pointer;
+      }
+   </style>
+   <script src="./repo.js" defer></script>
+   <script src="./addreview.js" defer></script>
+</head>
+
+<body>
+   <div class="product">
+      <label for="product-name">Название товара:</label>
+      <input type="text" id="product-name">
+   </div>
+
+   <div class="review">
+      <label for="review-text">Введите отзыв:</label>
+      <textarea name="" id="review-text" cols="30" rows="10"></textarea>
+   </div>
+
+   <button id="add-review_btn">Добавить отзыв</button>
+   <span id="error-message"></span>
+
+   <button id="to-reviews_btn">Посмотреть отзывы</button>
+
+</body>
+
+</html>
