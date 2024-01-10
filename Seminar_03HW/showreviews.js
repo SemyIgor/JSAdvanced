@@ -6,58 +6,57 @@ addReviewBtn.addEventListener('click', () => {
 	window.open('./addreview.html', '_self');
 });
 
+productsOutput();
+
+const showReviewsBtn = document.querySelectorAll('.show-reviews_btn');
+
+showReviewsBtn.forEach((btn) => {
+	btn.addEventListener('click', () => {
+		if (btn.textContent === 'Показать отзывы') {
+			btn.parentNode.nextElementSibling.classList.remove('hidden');
+			console.log(
+				'btn.parentElement:',
+				btn.parentNode.nextElementSibling.classList
+			);
+			btn.textContent = 'Скрыть отзывы';
+		} else {
+			btn.textContent = 'Показать отзывы';
+			btn.parentNode.nextElementSibling.classList.add('hidden');
+		}
+	});
+});
+
 function productsOutput() {
 	products.innerHTML = ``;
-}
+	// }
 
-const mapBaseArray = getShopBase();
-console.log('mapBaseArray: ', mapBaseArray);
-const mapBaseMap = new Map(mapBaseArray);
-console.log('mapBaseMap: ', mapBaseMap);
+	const mapBaseArray = getShopBase();
+	const mapBaseMap = new Map(mapBaseArray);
 
-let productList = ``;
-for (const product of mapBaseMap) {
-	console.log(product[0], product[1]);
-	// let reviewList = ``;
-	// product[1].forEach((review) => {
-	// 	console.log('review: ', review);
-	// });
-	const reviewList = product[1]
-		.map(
-			(el) => `
+	let productList = ``;
+	for (const product of mapBaseMap) {
+		console.log(product[0], product[1]);
+		const reviewList = product[1]
+			.map(
+				(el) => `
          <div class="review-line">
             <p class="review-text">${el}</p>
          </div>
          <button class="remove-review">Удалить отзыв</button>
       `
-		)
-		.join('\n');
+			)
+			.join('\n');
 
-	productList += `
+		productList += `
       <div class="product">
          <span class="product-name">${product[0]}</span>
          <button class="show-reviews_btn">Показать отзывы</button>
       </div>
-      <div class="reviews">
+      <div class="reviews hidden">
          <h3 class="product-name_head">${product[0]}</h3>
          ${reviewList}
       </div>
    `;
+	}
+	products.innerHTML = productList;
 }
-products.innerHTML = productList;
-
-console.log('mapBase.entries(): ', mapBaseMap.entries());
-
-let mod = `
-      <div class="product">
-         <span class="product-name">Товар 1</span>
-         <button class="show-reviews_btn">Показать отзывы</button>
-      </div>
-      <div class="reviews">
-         <h3 class="product-name_head">Товар 1</h3>
-         <div class="review-line">
-            <p class="review-text">Отзыв 1 Отзыв 1 Отзыв 1 Отзыв 1 Отзыв 1 Отзыв 1</p>
-         </div>
-         <button class="remove-review">Удалить отзыв</button>
-      </div>
-`;
