@@ -13,10 +13,14 @@ const ourShop = new Map([
 	['лук', ['Очень горький']],
 ]);
 
+console.log('ourShop: ', ourShop);
+
 function addReview(name, text) {
 	const nameLower = name.toLowerCase();
+	console.log('ourShop1: ', ourShop);
 	if (!ourShop.has(nameLower)) {
 		ourShop.set(nameLower, [text]);
+		console.log('ourShop2: ', ourShop);
 	} else {
 		const reviewsArray = ourShop.get(nameLower);
 		reviewsArray.push(text);

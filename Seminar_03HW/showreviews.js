@@ -6,48 +6,31 @@ addReviewBtn.addEventListener('click', () => {
 	window.open('./addreview.html', '_self');
 });
 
-productsOutput();
+// productsOutput();
 
-const showReviewsBtn = document.querySelectorAll('.show-reviews_btn');
+// function productsOutput() {
+// 	products.innerHTML = ``;
+// }
+// products.innerHTML = ``;
 
-showReviewsBtn.forEach((btn) => {
-	btn.addEventListener('click', () => {
-		if (btn.textContent === 'Показать отзывы') {
-			btn.parentNode.nextElementSibling.classList.remove('hidden');
-			console.log(
-				'btn.parentElement:',
-				btn.parentNode.nextElementSibling.classList
-			);
-			btn.textContent = 'Скрыть отзывы';
-		} else {
-			btn.textContent = 'Показать отзывы';
-			btn.parentNode.nextElementSibling.classList.add('hidden');
-		}
-	});
-});
+const mapBaseArray = getShopBase();
+const mapBaseMap = new Map(mapBaseArray);
 
-function productsOutput() {
-	products.innerHTML = ``;
-	// }
-
-	const mapBaseArray = getShopBase();
-	const mapBaseMap = new Map(mapBaseArray);
-
-	let productList = ``;
-	for (const product of mapBaseMap) {
-		console.log(product[0], product[1]);
-		const reviewList = product[1]
-			.map(
-				(el) => `
+let productList = ``;
+for (const product of mapBaseMap) {
+	console.log(product[0], product[1]);
+	const reviewList = product[1]
+		.map(
+			(el) => `
          <div class="review-line">
             <p class="review-text">${el}</p>
          </div>
          <button class="remove-review">Удалить отзыв</button>
       `
-			)
-			.join('\n');
+		)
+		.join('\n');
 
-		productList += `
+	productList += `
       <div class="product">
          <span class="product-name">${product[0]}</span>
          <button class="show-reviews_btn">Показать отзывы</button>
@@ -57,6 +40,20 @@ function productsOutput() {
          ${reviewList}
       </div>
    `;
-	}
-	products.innerHTML = productList;
 }
+products.innerHTML = productList;
+// }
+
+const showReviewsBtn = document.querySelectorAll('.show-reviews_btn');
+
+showReviewsBtn.forEach((btn) => {
+	btn.addEventListener('click', () => {
+		if (btn.textContent === 'Показать отзывы') {
+			btn.parentNode.nextElementSibling.classList.remove('hidden');
+			btn.textContent = 'Скрыть отзывы';
+		} else {
+			btn.textContent = 'Показать отзывы';
+			btn.parentNode.nextElementSibling.classList.add('hidden');
+		}
+	});
+});
